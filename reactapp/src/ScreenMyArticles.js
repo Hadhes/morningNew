@@ -13,6 +13,18 @@ function ScreenMyArticles(props) {
   const [content, setContent] = useState('')
 
 
+  // useEffect(() => {
+
+  //   const findArticlesInWishlist = async() => {
+  //     const wishlist = await fetch(`/wishlist-article?&token=${props.token}`);
+  //     const wishlistResponse = await wishlist.json();
+
+  //     props.saveArticle(wishlistResponse.articles);
+  //     console.log(wishlistResponse.articles);
+  //   };
+  //   findArticlesInWishlist();
+  // }, []);
+
 
   const showModal = (title, content) => {
     setVisible(true)
@@ -31,7 +43,7 @@ function ScreenMyArticles(props) {
     setVisible(false)
   }
 
-  const noArticles = '';
+  var noArticles = '';
   if (props.myArticles == 0) {
     noArticles = <div style={{marginTop:"30px"}}>No Articles</div>
   }
@@ -84,7 +96,10 @@ function ScreenMyArticles(props) {
 }
 
 function mapStateToProps(state){
-  return {myArticles: state.wishList}
+  return {
+    myArticles: state.wishList,
+    token: state.token
+  }
 }
 
 function mapDispatchToProps(dispatch){
@@ -93,6 +108,10 @@ function mapDispatchToProps(dispatch){
       dispatch({type: 'deleteArticle',
         title: articleTitle
       })
+    },
+    saveArticle: function(articles) {
+      dispatch({ type: 'saveArticle',
+                 articles: articles })
     }
   }
 }

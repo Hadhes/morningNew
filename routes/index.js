@@ -98,27 +98,34 @@ router.post('/sign-in', async function(req,res,next){
   // Route Whislist qui enregistre en BDD les articles choisis
 router.post('/wishlist-article', async function(req, res, next) {
 
-    var newArticle = new articleModel({
-      title: req.body.name, 
-      description: req.body.desc, 
-      urlToImage: req.body.img, 
-      content: req.body.content,
-      lang: req.body.lang,
-      token: req.body.token
-    });
+    let result = false;
 
-    console.log('POST /wishlist-article newArticle', newArticle)
+    const user = await userModel.findOne({token: req.body.token});
+
+    if(user != null) {
+      var newArticle = new articleModel({
+        title: req.body.name, 
+        description: req.body.desc, 
+        urlToImage: req.body.img, 
+        content: req.body.content,
+        lang: req.body.lang,
+        token: req.body.token
+      });
+
+      console.log('POST /wishlist-article newArticle', newArticle)
   
-    const articleSave = await newArticle.save();
-    console.log('articleSave', articleSave);
+      const articleSave = await newArticle.save();
+
+      console.log('articleSave', articleSave);
     
-    // var result = false
-    // if (articleSave.name) {
-    //   result = true
-    // };
+      if (articleSave.name) {
+        result = true
+      };
+    };
 
-    res.json({articleSave});
+    res.json({result, articleSave});
 
-})
+});
+
 
 module.exports = router;
