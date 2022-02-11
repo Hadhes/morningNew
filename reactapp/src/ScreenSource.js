@@ -24,6 +24,12 @@ function ScreenSource(props) {
       const data = await fetch(`https://newsapi.org/v2/sources?language=${langue}&country=${country}&apiKey=9b113ef4af7b4581abd544e9c761ab74`)
       const body = await data.json()
       setSourceList(body.sources)
+
+      const dataLanguage = await fetch('/language', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `tokenFromFront=${props.token}&languageFromFront=${langue}}`
+      })
     }
 
     APIResultsLoading()
@@ -62,7 +68,10 @@ function ScreenSource(props) {
 }
 
 function mapStateToProps(state){
-  return {selectedLang: state.selectedLang}
+  return {
+    selectedLang: state.selectedLang,
+    token: state.token
+  }
 }
 
 function mapDispatchToProps(dispatch){

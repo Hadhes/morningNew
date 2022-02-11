@@ -38,6 +38,7 @@ router.post('/sign-up', async function(req,res,next){
       email: req.body.emailFromFront,
       password: hash,
       token: uid2(32),
+      language: 'fr'
     })
   
     saveUser = await newUser.save()
@@ -86,9 +87,31 @@ router.post('/sign-in', async function(req,res,next){
     }
   }
   
-
   res.json({result, user, error, token})
 
+})
+
+router.put('/language', async function(req,res,next){
+
+  let result = false
+  let user = null
+  let language = null
+  
+  await userModel.updateOne({ 
+    token: req.body.tokenFromFront }, {
+    language: req.body.languageFromFront
+  })
+
+  user = await userModel.findOne({ token: req.body.tokenFromFront })
+
+  if (user) {
+    result = true
+
+  }
+
+  language = user.language
+
+  res.json({result, user, language})
 
 })
 
