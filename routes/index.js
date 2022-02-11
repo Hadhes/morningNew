@@ -99,8 +99,9 @@ router.post('/sign-in', async function(req,res,next){
 router.post('/wishlist-article', async function(req, res, next) {
 
     let result = false;
+    var articleSave = null
 
-    const user = await userModel.findOne({token: req.body.token});
+    var user = await userModel.findOne({token: req.body.token});
 
     if(user != null) {
       var newArticle = new articleModel({
@@ -112,20 +113,29 @@ router.post('/wishlist-article', async function(req, res, next) {
         token: req.body.token
       });
 
-      console.log('POST /wishlist-article newArticle', newArticle)
+      // console.log('POST /wishlist-article newArticle', newArticle)
   
-      const articleSave = await newArticle.save();
-
-      console.log('articleSave', articleSave);
+      articleSave = await newArticle.save();
     
-      if (articleSave.name) {
-        result = true
-      };
+      // if (articleSave.name) {
+      //   result = true
+      // };
     };
 
-    res.json({result, articleSave});
+    res.json({result});
 
 });
+
+
+//Route get wishlist qui récupère de la db les articles de la wishlist
+router.get('/wishlist-article', async function(req, res, next) {
+  console.log('GET /Wishlist-article req.query', req.query)
+
+  var articles = await articleModel.find({token: req.query.token}); 
+
+  res.json({articles});
+});
+
 
 
 module.exports = router;
