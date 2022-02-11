@@ -5,7 +5,8 @@ const uid2 = require('uid2')
 const bcrypt = require('bcrypt');
 
 const userModel = require('../models/users')
-
+// Importation Model Article
+const articleModel = require('../models/article');
 
 router.post('/sign-up', async function(req,res,next){
 
@@ -89,6 +90,34 @@ router.post('/sign-in', async function(req,res,next){
 
   res.json({result, user, error, token})
 
+
+});
+
+
+
+  // Route Whislist qui enregistre en BDD les articles choisis
+router.post('/wishlist-article', async function(req, res, next) {
+
+    var newArticle = new articleModel({
+      title: req.body.name, 
+      description: req.body.desc, 
+      urlToImage: req.body.img, 
+      content: req.body.content,
+      lang: req.body.lang,
+      token: req.body.token
+    });
+
+    console.log('POST /wishlist-article newArticle', newArticle)
+  
+    const articleSave = await newArticle.save();
+    console.log('articleSave', articleSave);
+    
+    // var result = false
+    // if (articleSave.name) {
+    //   result = true
+    // };
+
+    res.json({articleSave});
 
 })
 
