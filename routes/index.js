@@ -5,7 +5,8 @@ const uid2 = require('uid2')
 const bcrypt = require('bcrypt');
 
 const userModel = require('../models/users')
-
+// Importation Model Article
+const articleModel = require('../models/article');
 
 router.post('/sign-up', async function(req,res,next){
 
@@ -131,7 +132,53 @@ router.post('/language', async function(req,res,next){
 
   res.json({result, user, language})
   
-})
+});
+
+
+
+
+  // Route Whislist qui enregistre en BDD les articles choisis
+router.post('/wishlist-article', async function(req, res, next) {
+
+    let result = false;
+    var articleSave = null
+
+    var user = await userModel.findOne({token: req.body.token});
+
+    if(user != null) {
+      var newArticle = new articleModel({
+        title: req.body.name, 
+        description: req.body.desc, 
+        urlToImage: req.body.img, 
+        content: req.body.content,
+        lang: req.body.lang,
+        token: req.body.token
+      });
+
+      // console.log('POST /wishlist-article newArticle', newArticle)
+  
+      articleSave = await newArticle.save();
+    
+      // if (articleSave.name) {
+      //   result = true
+      // };
+    };
+
+    res.json({result});
+
+});
+
+
+//Route get wishlist qui récupère de la db les articles de la wishlist
+router.get('/wishlist-article', async function(req, res, next) {
+  console.log('GET /Wishlist-article req.query', req.query)
+
+  var articles = await articleModel.find({token: req.query.token}); 
+
+  res.json({articles});
+});
+
+
 
 
 

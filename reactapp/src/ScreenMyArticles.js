@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect } from 'react';
 import './App.css';
 import { Card, Icon, Modal} from 'antd';
 import Nav from './Nav'
@@ -11,7 +11,26 @@ function ScreenMyArticles(props) {
   const [visible, setVisible] = useState(false)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [wishlist, setWishList] = useState([])
 
+  let articlesWishlist = []
+
+
+  useEffect(() => {
+
+    const findArticlesInWishlist = async() => {
+      const wishlist = await fetch(`/wishlist-article?&token=${props.token}`);
+      const wishlistResponse = await wishlist.json();
+      console.log('wL Response', wishlistResponse);
+
+      console.log('wL Response', wishlistResponse.articles);
+      articlesWishlist = wishlistResponse.articles;
+      console.log('articlesWishlist', articlesWishlist);
+      setWishList(articlesWishlist)
+    };
+    findArticlesInWishlist();
+
+  }, []);
 
 
   const showModal = (title, content) => {
@@ -31,18 +50,21 @@ function ScreenMyArticles(props) {
     setVisible(false)
   }
 
-  const noArticles = '';
-  if (props.myArticles == 0) {
-    noArticles = <div style={{marginTop:"30px"}}>No Articles</div>
-  }
+  // var noArticles = '';
+  // if (articlesWishlist.length === 0) {
+  //   noArticles = <div style={{marginTop:"30px"}}>No Articles</div>
+  // }
+
+  console.log('articlesWishlist2', articlesWishlist)
+
 
   return (
     <div>
       <Nav/>
         <div className="Banner"/>
-        {noArticles}
+        {/* {noArticles} */}
         <div className="Card">
-        {props.myArticles.map((article,i) => (
+        {wishlist.map((article,i) => (
           <div key={i} style={{display:'flex',justifyContent:'center'}}>
             <Card
               style={{ 
@@ -84,7 +106,10 @@ function ScreenMyArticles(props) {
 }
 
 function mapStateToProps(state){
-  return {myArticles: state.wishList}
+  return {
+    myArticles: state.wishList,
+    token: state.token
+  }
 }
 
 function mapDispatchToProps(dispatch){
@@ -93,7 +118,11 @@ function mapDispatchToProps(dispatch){
       dispatch({type: 'deleteArticle',
         title: articleTitle
       })
-    }
+    },
+    // saveArticle: function(articles) {
+    //   dispatch({ type: 'saveArticle',
+    //              articles: articles })
+    // }
   }
 }
 
