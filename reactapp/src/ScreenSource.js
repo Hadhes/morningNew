@@ -13,35 +13,56 @@ function ScreenSource(props) {
 
   useEffect(() => {
     const APIResultsLoading = async() => {
-      var langue = 'fr'
-      var country = 'fr'
-        
-      if(selectedLang == 'en'){
+
+      const dataBase = await fetch('/language', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `tokenFromFront=${props.token}`
+      })
+      var response = await dataBase.json();
+      console.log('response', response);
+
+      setSelectedLang(response.language)
+
+      if(selectedLang === 'en'){
         var langue = 'en'
         var country = 'us'
+      } else {
+        var langue = 'fr'
+        var country = 'fr'
       }
+
       props.changeLang(selectedLang)
       const data = await fetch(`https://newsapi.org/v2/sources?language=${langue}&country=${country}&apiKey=9b113ef4af7b4581abd544e9c761ab74`)
       const body = await data.json()
       setSourceList(body.sources)
-
-      const dataLanguage = await fetch('/language', {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `tokenFromFront=${props.token}&languageFromFront=${langue}}`
-      })
+      
     }
 
     APIResultsLoading()
   }, [selectedLang])
+
+  const clickLanguage = async language => {
+    setSelectedLang(language)
+
+    var langue = language
+
+    const dataLanguage = await fetch('/language', {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: `tokenFromFront=${props.token}&languageFromFront=${langue}`
+    })
+
+  }
+
 
   return (
     <div>
         <Nav/>
        
        <div style={{display:'flex', justifyContent:'center', alignItems:'center'}} className="Banner">
-          <img style={{width:'40px', margin:'10px',cursor:'pointer'}} src='/images/fr.png' onClick={() => setSelectedLang('fr')} />
-          <img style={{width:'40px', margin:'10px',cursor:'pointer'}} src='/images/uk.png' onClick={() => setSelectedLang('en')} /> 
+          <img style={{width:'40px', margin:'10px',cursor:'pointer'}} src='/images/fr.png' onClick={() => clickLanguage('fr')} />
+          <img style={{width:'40px', margin:'10px',cursor:'pointer'}} src='/images/uk.png' onClick={() => clickLanguage('en')} /> 
         </div>
 
        <div className="HomeThemes">

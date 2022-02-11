@@ -100,7 +100,7 @@ function mapDispatchToProps(dispatch){
       dispatch({type: 'addToken', token: token})
     }
   }
-}
+  }
 
 export default connect(
   null,

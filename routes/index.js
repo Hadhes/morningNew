@@ -38,7 +38,7 @@ router.post('/sign-up', async function(req,res,next){
       email: req.body.emailFromFront,
       password: hash,
       token: uid2(32),
-      language: 'fr'
+      language: 'Fr'
     })
   
     saveUser = await newUser.save()
@@ -106,13 +106,33 @@ router.put('/language', async function(req,res,next){
 
   if (user) {
     result = true
-
+    language = user.language
   }
-
-  language = user.language
 
   res.json({result, user, language})
 
 })
+
+router.post('/language', async function(req,res,next){
+
+  console.log('/language')
+
+  let result = false
+  let user = null
+
+  user = await userModel.findOne({ token: req.body.tokenFromFront })
+
+  if (user) {
+    result = true
+    var language = user.language
+  }
+
+  console.log('user', user)
+
+  res.json({result, user, language})
+  
+})
+
+
 
 module.exports = router;
