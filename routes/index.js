@@ -1,18 +1,18 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var uid2 = require('uid2')
-var bcrypt = require('bcrypt');
+const uid2 = require('uid2')
+const bcrypt = require('bcrypt');
 
-var userModel = require('../models/users')
+const userModel = require('../models/users')
 
 
 router.post('/sign-up', async function(req,res,next){
 
-  var error = []
-  var result = false
-  var saveUser = null
-  var token = null
+  let error = []
+  let result = false
+  let saveUser = null
+  let token = null
 
   const data = await userModel.findOne({
     email: req.body.emailFromFront
@@ -32,8 +32,8 @@ router.post('/sign-up', async function(req,res,next){
 
   if(error.length == 0){
 
-    var hash = bcrypt.hashSync(req.body.passwordFromFront, 10);
-    var newUser = new userModel({
+    const hash = bcrypt.hashSync(req.body.passwordFromFront, 10);
+    const newUser = new userModel({
       username: req.body.usernameFromFront,
       email: req.body.emailFromFront,
       password: hash,
@@ -55,10 +55,10 @@ router.post('/sign-up', async function(req,res,next){
 
 router.post('/sign-in', async function(req,res,next){
 
-  var result = false
-  var user = null
-  var error = []
-  var token = null
+  let result = false
+  let user = null
+  let error = []
+  let token = null
   
   if(req.body.emailFromFront == ''
   || req.body.passwordFromFront == ''

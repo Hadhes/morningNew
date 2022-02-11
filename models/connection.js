@@ -1,15 +1,19 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-var options = {
+const options = {
     connectTimeoutMS: 5000,
-    useUnifiedTopology : true,
-    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true
 }
 
-mongoose.connect('mongodb+srv://david:hgm4lRQq8QM1p3P8@cluster0-9xbpy.mongodb.net/morningnews?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://mongotest:mongotest@cluster0.0qy9h.mongodb.net/morningnews?retryWrites=true&w=majority',
     options,
     function(err){
-        console.log(err);
+        if(err) {
+            console.log('erreur :',err)
+        } else {
+            console.log('Connexion OK')
+        }
     }
 )
 

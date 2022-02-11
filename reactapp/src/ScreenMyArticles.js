@@ -14,93 +14,72 @@ function ScreenMyArticles(props) {
 
 
 
-  var showModal = (title, content) => {
+  const showModal = (title, content) => {
     setVisible(true)
     setTitle(title)
     setContent(content)
 
   }
 
-  var handleOk = e => {
+  const handleOk = e => {
     console.log(e)
     setVisible(false)
   }
 
-  var handleCancel = e => {
+  const handleCancel = e => {
     console.log(e)
     setVisible(false)
   }
 
-  var noArticles
-  if(props.myArticles == 0){
+  const noArticles = '';
+  if (props.myArticles == 0) {
     noArticles = <div style={{marginTop:"30px"}}>No Articles</div>
   }
 
   return (
     <div>
-         
-            <Nav/>
-
-            <div className="Banner"/>
-
-            {noArticles}
-
-            <div className="Card">
-    
-
-            {props.myArticles.map((article,i) => (
-                <div key={i} style={{display:'flex',justifyContent:'center'}}>
-
-                  <Card
-                    
-                    style={{ 
-                    width: 300, 
-                    margin:'15px', 
-                    display:'flex',
-                    flexDirection: 'column',
-                    justifyContent:'space-between' }}
-                    cover={
-                    <img
-                        alt="example"
-                        src={article.urlToImage}
-                    />
-                    }
-                    actions={[
-                        <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title,article.content)} />,
-                        <Icon type="delete" key="ellipsis" onClick={() => props.deleteToWishList(article.title)} />
-                    ]}
-                    >
-
-                    <Meta
-                      title={article.title}
-                      description={article.description}
-                    />
-
-                  </Card>
-                  <Modal
-                    title={title}
-                    visible={visible}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                  >
-                    <p>{content}</p>
-                  </Modal>
-
-                </div>
-
-              ))}
-
-
-
-       
-
-                
-
-             </div>
-      
- 
-
-      </div>
+      <Nav/>
+        <div className="Banner"/>
+        {noArticles}
+        <div className="Card">
+        {props.myArticles.map((article,i) => (
+          <div key={i} style={{display:'flex',justifyContent:'center'}}>
+            <Card
+              style={{ 
+                width: 300, 
+                margin:'15px', 
+                display:'flex',
+                flexDirection: 'column',
+                justifyContent:'space-between'
+              }}
+              cover={
+                <img
+                  alt="example"
+                  src={article.urlToImage}
+                />
+              }
+              actions={[
+                <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title,article.content)} />,
+                <Icon type="delete" key="ellipsis" onClick={() => props.deleteToWishList(article.title)} />
+              ]}
+            >
+              <Meta
+                title={article.title}
+                description={article.description}
+              />
+            </Card>
+            <Modal
+              title={title}
+              visible={visible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <p>{content}</p>
+            </Modal>
+          </div>
+        ))}
+    </div>
+  </div>
   );
 }
 
@@ -117,8 +96,6 @@ function mapDispatchToProps(dispatch){
     }
   }
 }
-
-
 
 export default connect(
   mapStateToProps,

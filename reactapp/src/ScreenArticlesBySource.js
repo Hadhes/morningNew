@@ -15,11 +15,11 @@ function ScreenArticlesBySource(props) {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
-  var { id } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     const findArticles = async() => {
-      const data = await fetch(`https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=b32c8b844d1243b1a7998d8228910f50`)
+      const data = await fetch(`https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=9b113ef4af7b4581abd544e9c761ab74`)
       const body = await data.json()
       console.log(body)
       setArticleList(body.articles) 
@@ -28,82 +28,66 @@ function ScreenArticlesBySource(props) {
     findArticles()    
   },[])
 
-  var showModal = (title, content) => {
+  const showModal = (title, content) => {
     setVisible(true)
     setTitle(title)
     setContent(content)
 
   }
 
-  var handleOk = e => {
+  const handleOk = e => {
     console.log(e)
     setVisible(false)
   }
 
-  var handleCancel = e => {
+  const handleCancel = e => {
     console.log(e)
     setVisible(false)
   }
 
   return (
     <div>
-         
-            <Nav/>
-
-            <div className="Banner"/>
-
-            <div className="Card">
-              {articleList.map((article,i) => (
-                <div key={i} style={{display:'flex',justifyContent:'center'}}>
-
-                <Card
-                  
-                  style={{ 
-                  width: 300, 
-                  margin:'15px', 
-                  display:'flex',
-                  flexDirection: 'column',
-                  justifyContent:'space-between' }}
-                  cover={
-                  <img
-                      alt="example"
-                      src={article.urlToImage}
-                  />
-                  }
-                  actions={[
-                      <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title,article.content)} />,
-                      <Icon type="like" key="ellipsis" onClick={()=> {props.addToWishList(article)}} />
-                  ]}
-                  >
-
-                  <Meta
-                    title={article.title}
-                    description={article.description}
-                  />
-
-                </Card>
-                <Modal
-                  title={title}
-                  visible={visible}
-                  onOk={handleOk}
-                  onCancel={handleCancel}
-                >
-                  <p>{content}</p>
-                </Modal>
-
-              </div>
-
-              ))}
-              
-
-
-            
-
-           </div> 
-
-         
-      
-      </div>
+      <Nav/>
+      <div className="Banner"/>
+      <div className="Card">
+        {articleList.map((article,i) => (
+          <div key={i} style={{display:'flex',justifyContent:'center'}}>
+            <Card
+              style={{ 
+                width: 300, 
+                margin:'15px', 
+                display:'flex',
+                flexDirection: 'column',
+                justifyContent:'space-between' 
+              }}
+              cover={ 
+                <img
+                  alt="example"
+                  src={article.urlToImage}
+                />
+              }
+              actions={[
+                <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title,article.content)} />,
+                <Icon type="like" key="ellipsis" onClick={()=> {props.addToWishList(article)}} />
+              ]}
+            >
+            <Meta
+              title={article.title}
+              description={article.description}
+            />
+            </Card>
+            <Modal
+              title={title}
+              visible={visible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <p>{content}</p>
+            </Modal>
+          </div>
+        ))}
+      </div> 
+    </div>
   );
 }
 

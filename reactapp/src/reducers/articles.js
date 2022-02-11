@@ -1,12 +1,12 @@
 export default function(wishList = [], action){
 
-    if(action.type == 'addArticle'){
-        var wishListCopy = [...wishList]
+    if(action.type === 'addArticle'){
+        const wishListCopy = [...wishList]
 
-        var findArticle = false
+        let findArticle = false
 
         for(let i=0;i<wishListCopy.length;i++){
-            if(wishListCopy[i].title == action.articleLiked.title){
+            if(wishListCopy[i].title === action.articleLiked.title){
                 findArticle = true
             }
         }
@@ -16,16 +16,16 @@ export default function(wishList = [], action){
         }
         
         return wishListCopy
-    } else if(action.type == 'deleteArticle'){
-        var wishListCopy = [...wishList]
-        var position = null
+    } else if(action.type === 'deleteArticle'){
+        const wishListCopy = [...wishList]
+        let position = null
 
         for(let i=0;i<wishListCopy.length;i++){
-            if(wishListCopy[i].title == action.title){
+            if(wishListCopy[i].title === action.title){
                 position = i
             }
         }
-        if(position != null){
+        if(position !== null){
             wishListCopy.splice(position,1)
         }
 
